@@ -1,41 +1,46 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class AnalyticsCounter {
-	private static int headacheCount = 0;	// initialize to 0
-	private static int rashCount = 0;		// initialize to 0
-	private static int pupilCount = 0;		// initialize to 0
-	
+	private ISymptomReader reader;
+	private ISymptomWriter writer;
+
+	public AnalyticsCounter(ISymptomReader reader, ISymptomWriter writer){
+		this.reader = reader;
+		this.writer = writer;
+	}
+
+	public List<String> getSymptoms(){
+		return reader.GetSymptoms();
+	}
+
+	public static Map<String, Integer> countSymptoms(List<String> symptoms) {
+		Map<String, Integer> symptomsCounted = new HashMap<>();
+		for(String symptom : symptoms){
+			if(!symptomsCounted.containsKey(symptom)){
+				symptomsCounted.put(symptom,1);
+			}else{
+				symptomsCounted.put(symptom,symptomsCounted.get(symptom)+1);
+			}
+		}
+		return symptomsCounted;
+	}
+
+	public static Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
+		return new TreeMap<>(symptoms);
+	}
+
+	public void writeSymptoms(Map<String, Integer> symptoms) {
+		writer.writeSymptoms(symptoms);
+	}
+
 	public static void main(String args[]) throws Exception {
 
-		BufferedReader reader = new BufferedReader (new FileReader("symptoms.txt"));
-		String line = reader.readLine();
-
-		while (line != null) {
-			if (line.equals("headache")) {
-				headacheCount++;
-			}
-			else if (line.equals("rash")) {
-				rashCount++;
-			}
-			else if (line.contains("pupils")) {
-				pupilCount++;
-			}
-			line = reader.readLine();	// get another symptom
-		}
-
-		reader.close();
-
-		FileWriter writer = new FileWriter ("result.out");
-		writer.write("headache: " + headacheCount + "\n");
-		writer.write("rash: " + rashCount + "\n");
-		writer.write("dialated pupils: " + pupilCount + "\n");
-		writer.close();
+		ISymptomReader r = new ReadSymptomDataFromFile("symptoms.txt");
+		ISymptomWriter w = new WriteSymptomDataToFile();
+		List<String> list = r.GetSymptoms();
+		w.writeSymptoms(sortSymptoms(countSymptoms(list)));
 
 	}
 }
