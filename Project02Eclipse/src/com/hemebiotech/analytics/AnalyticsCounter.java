@@ -15,7 +15,7 @@ public class AnalyticsCounter {
 		return reader.GetSymptoms();
 	}
 
-	public static Map<String, Integer> countSymptoms(List<String> symptoms) {
+	public Map<String, Integer> countSymptoms(List<String> symptoms) {
 		Map<String, Integer> symptomsCounted = new HashMap<>();
 		for(String symptom : symptoms){
 			if(!symptomsCounted.containsKey(symptom)){
@@ -27,7 +27,7 @@ public class AnalyticsCounter {
 		return symptomsCounted;
 	}
 
-	public static Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
+	public Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
 		return new TreeMap<>(symptoms);
 	}
 
@@ -35,12 +35,4 @@ public class AnalyticsCounter {
 		writer.writeSymptoms(symptoms);
 	}
 
-	public static void main(String args[]) throws Exception {
-
-		ISymptomReader r = new ReadSymptomDataFromFile("symptoms.txt");
-		ISymptomWriter w = new WriteSymptomDataToFile();
-		List<String> list = r.GetSymptoms();
-		w.writeSymptoms(sortSymptoms(countSymptoms(list)));
-
-	}
 }
