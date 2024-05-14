@@ -10,21 +10,25 @@ import java.util.Map;
  */
 public class WriteSymptomDataToFile implements ISymptomWriter {
 
-    public WriteSymptomDataToFile(){
+    private String fileOutName;
 
+    /**
+     *
+     * @param fileOutName the name of the output file
+     */
+    public WriteSymptomDataToFile(String fileOutName){
+        this.fileOutName = fileOutName;
     }
 
     @Override
     public void writeSymptoms(Map<String, Integer> symptoms){
         if(symptoms != null){
-            try {
-                FileWriter writer = new FileWriter("result.out");
+            try(FileWriter writer = new FileWriter(fileOutName)) {
                 for(Map.Entry<String,Integer> entry : symptoms.entrySet()) {
                     writer.write(entry.getKey() + " " + entry.getValue() + "\n");
                 }
-                writer.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error while writing : " + e.getMessage());
             }
         }
     }
