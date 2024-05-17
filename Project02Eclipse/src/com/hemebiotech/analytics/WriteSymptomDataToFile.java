@@ -13,7 +13,7 @@ public class WriteSymptomDataToFile implements ISymptomWriter {
     private String fileOutName;
 
     /**
-     *
+     *  Constructor of WriteSymptomDataToFile
      * @param fileOutName the name of the output file
      */
     public WriteSymptomDataToFile(String fileOutName){

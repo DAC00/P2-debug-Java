@@ -6,6 +6,11 @@ public class AnalyticsCounter {
 	private ISymptomReader reader;
 	private ISymptomWriter writer;
 
+	/**
+	 * Constructor of AnalyticsCounter
+	 * @param reader get the data from the source
+	 * @param writer write data into a file
+	 */
 	public AnalyticsCounter(ISymptomReader reader, ISymptomWriter writer){
 		this.reader = reader;
 		this.writer = writer;
